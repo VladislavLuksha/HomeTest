@@ -11,7 +11,11 @@ export class InventoryPage {
     await this.page.click('.inventory_item button');
   }
 
-  async getCartBadgeText(): Promise<string> {
+  async addItemToCartByIndex(index: number) {
+    await this.page.locator('.inventory_item button').nth(index).click();
+  }
+  
+  async getCartBadgeText(): Promise<string | null> {
     return this.page.locator('.shopping_cart_badge').textContent();
   }
 }
