@@ -1,0 +1,48 @@
+{
+  "name": "hometest",
+  "version": "1.0.0",
+  "description": "Automation tests using Playwright and Supertest",
+  "main": "index.js",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
+    "@types/supertest": "^6.0.3",
+    "allure-commandline": "^2.34.0",
+    "allure-mocha": "^3.2.2",
+    "allure-playwright": "^3.2.2",
+    "chai": "^5.2.0",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "mocha": "^11.5.0",
+    "playwright": "^1.52.0",
+    "prettier": "^3.5.3",
+    "supertest": "^7.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "test:ui": "npx playwright test",
+    "test:api": "mocha -r ts-node/register --reporter allure-mocha test/specs/api/**/*.spec.ts",
+    "test:all": "npm run test:api && npm run test:ui",
+    "report:generate": "allure generate allure-results --clean",
+    "report:open": "allure open",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VladislavLuksha/HomeTest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VladislavLuksha/HomeTest/issues"
+  },
+  "homepage": "https://github.com/VladislavLuksha/HomeTest#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0"
+  }
+}
