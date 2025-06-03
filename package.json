@@ -4,6 +4,7 @@
   "description": "Automation tests using Playwright and Supertest",
   "main": "index.js",
   "devDependencies": {
+    "@faker-js/faker": "^9.8.0",
     "@playwright/test": "^1.52.0",
     "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",

@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
+import { User } from '../src/interfaces/user';
 dotenv.config();
 
-export const credentials = {
+export const credentials: User = {
   username: process.env.USERNAME || '',
   password: process.env.PASSWORD || '',
 };

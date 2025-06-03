@@ -1,21 +1,31 @@
-import { Page } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
+import { BasePage } from './base.page';
 
-export class InventoryPage {
-  constructor(private page: Page) {}
+export class InventoryPage extends BasePage {
+  readonly inventoryItems: Locator;
+  readonly addToCartButtons: Locator;
+  readonly cartBadge: Locator;
+
+  constructor(page: Page) {
+    super(page);
+    this.inventoryItems = this.getElement('.inventory_item');
+    this.addToCartButtons = this.getElement('.inventory_item button');
+    this.cartBadge = this.getElement('.shopping_cart_badge');
+  }
 
   async getInventoryItemsCount(): Promise<number> {
-    return this.page.locator('.inventory_item').count();
+    return this.inventoryItems.count();
   }
 
   async addFirstItemToCart() {
-    await this.page.click('.inventory_item button');
+    await this.addToCartButtons.first().click();
   }
 
   async addItemToCartByIndex(index: number) {
-    await this.page.locator('.inventory_item button').nth(index).click();
+    await this.addToCartButtons.nth(index).click();
   }
-  
+
   async getCartBadgeText(): Promise<string | null> {
-    return this.page.locator('.shopping_cart_badge').textContent();
+    return this.cartBadge.textContent();
   }
 }

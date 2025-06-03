@@ -1,8 +1,9 @@
 import { Page } from '@playwright/test';
-import { LoginPage } from '../pages/login.page.js';
-import { credentials } from '../../config/config.js';
+import { LoginPage } from '../pages/login.page';
+import { User } from '../interfaces/user';
 
-export async function loginByUser(page: Page, loginPage: LoginPage) {
+export async function loginByUser(page: Page, user: User) {
+  const loginPage = new LoginPage(page);
   await page.goto('/');
-  await loginPage.login(credentials.username, credentials.password);
+  await loginPage.login(user.username, user.password);
 }
