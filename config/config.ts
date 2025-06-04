@@ -7,6 +7,11 @@ export const credentials: User = {
   password: process.env.PASSWORD || '',
 };
 
+export const lockedOutUser: User = {
+  username: process.env.USERNAME_LOCKED || '',
+  password: process.env.PASSWORD_LOCKED || '',
+};
+
 export const urls = {
   baseUrl: 'https://www.saucedemo.com',
   apiUrl: 'https://airportgap.com'
