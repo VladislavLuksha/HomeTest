@@ -1,19 +1,11 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../../../src/pages/login.page';
+import { test, expect } from '../../base.test'
 import { generateFakeUser } from '../../../src/data/test.data';
 import { loginByUser } from '../../../src/helpers/login.helper';
-import { HeaderPage } from '../../../src/pages/header.page';
-import { credentials } from '../../../config/config';
+import { credentials, lockedOutUser } from '../../../config/config';
 import { User } from '../../../src/interfaces/user';
 
 test.describe('Login tests', () => {
-  let loginPage: LoginPage;
-
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-  });
-
-  test('should show error for invalid login', async ({ page }) => {
+  test('Should show error for invalid login', async ({ loginPage, page }) => {
     const user: User = generateFakeUser();
 
     await test.step('Attempt login with invalid credentials', async () => {
@@ -26,7 +18,7 @@ test.describe('Login tests', () => {
     });
   });
 
-  test('should login successfully and land on inventory page', async ({ page }) => {
+  test('Should login successfully and land on inventory page', async ({ page }) => {
     await test.step('Login with valid credentials', async () => {
       await loginByUser(page, credentials);
     });
@@ -36,8 +28,7 @@ test.describe('Login tests', () => {
     });
   });
 
-  test('should logout successfully', async ({ page }) => {
-    const headerPage = new HeaderPage(page);
+  test('Should logout successfully', async ({ headerPage, page, loginPage }) => {
     await loginByUser(page, credentials);
   
     await test.step('Click burger menu and logout', async () => {
@@ -48,5 +39,42 @@ test.describe('Login tests', () => {
       await expect(page).toHaveURL('/');
       await expect(loginPage.usernameInput).toBeVisible();
     });
+  });
+
+  test('Should show error for locked out user',  async ({ loginPage, page }) => {
+    await test.step('Try to login as locked out user', async () => {
+      await loginByUser(page, lockedOutUser);
+    });
+
+    await test.step('Verify error message', async () => {
+      const error = await loginPage.getErrorMessage();
+      expect(error).toContain('Sorry, this user has been locked out.');
+    });
+  });
+
+  test('Should show error if username is missing', async ({ loginPage, page }) => {
+    await page.goto('/');
+    await loginPage.passwordInput.fill(credentials.password);
+    await loginPage.loginButton.click();
+
+    const error = await loginPage.getErrorMessage();
+    expect(error).toContain('Username is required');
+  });
+
+  test('Should show error if password is missing', async ({ loginPage, page }) => {
+    await page.goto('/');
+    await loginPage.usernameInput.fill(credentials.username);
+    await loginPage.loginButton.click();
+
+    const error = await loginPage.getErrorMessage();
+    expect(error).toContain('Password is required');
+  });
+
+  test('Should show error if both fields are empty', async ({ loginPage, page }) => {
+    await page.goto('/');
+    await loginPage.loginButton.click();
+
+    const error = await loginPage.getErrorMessage();
+    expect(error).toContain('Username is required');
   });
 });
